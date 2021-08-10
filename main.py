@@ -1,7 +1,6 @@
 import pandas as pd
 import streamlit as st
 from sklearn import linear_model
-from PIL import Image
 
 #Get the Data from the Github csv
 df = pd.read_csv('https://raw.githubusercontent.com/danielsteinw/PredictionApps/main/transportCosts.csv')
