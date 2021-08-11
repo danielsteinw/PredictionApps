@@ -23,10 +23,10 @@ def user_input_features():
     volume = 0
     weight = 0
     #FB large
-    fb_large = st.sidebar.checkbox('FB large')
-    if fb_large:
-        volume += 3215360
-        weight += 365
+    fb_large = st.sidebar.number_input(label = 'FB large', min_value = 0, step = 1)
+    if fb_large > 0:
+        volume += 3215360*fb_large
+        weight += 365*fb_large
     #FB small
     fb_small = st.sidebar.checkbox('FB small')
     if fb_small:
@@ -45,7 +45,7 @@ def user_input_features():
     express = st.sidebar.checkbox('Express Shipment')
     hazardous = st.sidebar.checkbox('Hazardous Goods')
     distance = st.sidebar.slider('Distance [km]', 1, 3000)
-    extra_volume = st.sidebar.number_input(label = 'Extra Volume [cm³]', step=1)
+    extra_volume = st.sidebar.number_input(label = 'Extra Volume [cm³]', step=50)
     extra_weight = st.sidebar.number_input(label = 'Extra Weight [kg]', step=1)
 
     data = {'Express': express,
