@@ -7,8 +7,8 @@ df = pd.read_csv('https://raw.githubusercontent.com/danielsteinw/PredictionApps/
 
 #Write the Header
 st.write("""
-# Transport Cost Prediction Application
-This app predicts the **Transport Costs**!
+# Transport Cost Prediction
+This application predicts the **Transport Costs**!
 """)
 
 #Writhe the Header of the Sidebar
