@@ -44,7 +44,7 @@ def user_input_features():
 
     express = st.sidebar.checkbox('Express Shipment')
     hazardous = st.sidebar.checkbox('Hazardous Goods')
-    distance = st.sidebar.slider('Distance [km]', 1, 5000)
+    distance = st.sidebar.slider('Distance [km]', 1, 3000)
     extra_volume = st.sidebar.number_input(label = 'Extra Volume [cm³]', step=1)
     extra_weight = st.sidebar.number_input(label = 'Extra Weight [kg]', step=1)
 
