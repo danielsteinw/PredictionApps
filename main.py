@@ -28,15 +28,15 @@ def user_input_features():
         volume += 3215360*fb_large
         weight += 365*fb_large
     #FB small
-    fb_small = st.sidebar.checkbox('FB small')
-    if fb_small:
-        volume += 1443200
-        weight += 240
+    fb_small = st.sidebar.number_input(label = 'FB small', min_value = 0, step = 1)
+    if fb_small > 0:
+        volume += 1443200*fb_small
+        weight += 240*fb_small
     #SB
-    sb = st.sidebar.checkbox('SB')
-    if sb:
-        volume += 1488000
-        weight += 343
+    sb = st.sidebar.number_input(label = 'SB', min_value = 0, step = 1)
+    if sb > 0:
+        volume += 1488000*sb
+        weight += 343*sb
 
     st.sidebar.write("""
     ### Further Input Parameters
