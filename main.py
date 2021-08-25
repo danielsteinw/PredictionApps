@@ -129,7 +129,7 @@ def user_input_features():
         st.session_state.volume += package_length*package_width*package_height
         st.session_state.weight += package_weight
         st.session_state.products_text.append(str('Package: ') + str(package_length) + str('x') + str(package_width) +
-                                              str('x') + str(package_length) + str('cm³, ') + str(package_weight) + 'kg')
+                                              str('x') + str(package_height) + str('cm³, ') + str(package_weight) + 'kg')
 
     st.sidebar.write(str('__________________________________'))
 
