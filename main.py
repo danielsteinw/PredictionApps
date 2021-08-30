@@ -12,6 +12,7 @@ if 'products_text' not in st.session_state:
 #Get the Data from the Github csv
 df = pd.read_csv('https://raw.githubusercontent.com/danielsteinw/PredictionApps/main/transportCosts.csv')
 df_dimensions = pd.read_csv('https://raw.githubusercontent.com/danielsteinw/PredictionApps/main/dimensions.csv', index_col=0)
+names_list = pd.read_csv('https://raw.githubusercontent.com/danielsteinw/PredictionApps/main/dimensions.csv')['Product'].to_list()
 
 #Write the Header
 st.write("""
@@ -40,10 +41,7 @@ def user_input_features():
     ### Products for Shipment
         """)
 
-    products_opt = ['FB large', 'FB small', 'SB', 'XB', 'PA', 'PA child', 'PS', 'PS child', 'BS', 'BS child', 'C2',
-                    'MC', 'MC E-Scooter', 'EQ', 'FlexPli', 'AN static roe', 'AN static white tail deer',
-                    'AN static wild boar', 'AN static moose']
-    products_radio = st.sidebar.radio('Products', products_opt)
+    products_radio = st.sidebar.radio('Products', names_list)
 
     st.sidebar.write(formate_dimensions(products_radio))
     products_add = st.sidebar.button('Add Product')
