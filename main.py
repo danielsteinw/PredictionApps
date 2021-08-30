@@ -11,7 +11,7 @@ if 'products_text' not in st.session_state:
 
 #Get the Data from the Github csv
 df = pd.read_csv('https://raw.githubusercontent.com/danielsteinw/PredictionApps/main/transportCosts.csv')
-df_dimensions = pd.read_csv('https://raw.githubusercontent.com/danielsteinw/PredictionApps/main/dimensions.csv')
+df_dimensions = pd.read_csv('https://raw.githubusercontent.com/danielsteinw/PredictionApps/main/dimensions.csv', index_col=0)
 
 #Write the Header
 st.write("""
@@ -21,6 +21,14 @@ This application predicts the **Transport Costs** for 4activeSystems GmbH.
 
 #Writhe the Header of the Sidebar
 st.sidebar.header('User Input Parameters')
+
+def formate_dimensions(product):
+
+    text = product + ": " + str(df_dimensions.loc[product, 'Length [cm]']) + 'x' + str(df_dimensions.loc[product, 'Width [cm]']) \
+    + 'x' + str(df_dimensions.loc[product, 'Height [cm]']) + 'cm³, ' \
+    + str(df_dimensions.loc[product, 'Weight [kg]']) + 'kg'
+    return text
+
 
 def user_input_features():
 
@@ -36,86 +44,15 @@ def user_input_features():
                     'MC', 'MC E-Scooter', 'EQ', 'FlexPli', 'AN static roe', 'AN static white tail deer',
                     'AN static wild boar', 'AN static moose']
     products_radio = st.sidebar.radio('Products', products_opt)
+
+    st.sidebar.write(formate_dimensions(products_radio))
     products_add = st.sidebar.button('Add Product')
 
     if products_add:
-        if products_radio == 'FB large':
-            st.session_state.products_text.append(str('FB large'))
-            st.session_state.volume += 3215360
-            st.session_state.weight += 365
-        if products_radio == 'FB small':
-            st.session_state.products_text.append(str('FB small'))
-            st.session_state.volume += 1443200
-            st.session_state.weight += 240
-        if products_radio == 'SB':
-            st.session_state.products_text.append(str('SB'))
-            st.session_state.volume += 1488000
-            st.session_state.weight += 343
-        if products_radio == 'XB':
-            st.session_state.products_text.append(str('XB'))
-            st.session_state.volume += 1768000
-            st.session_state.weight += 650
-        if products_radio == 'PA':
-            st.session_state.products_text.append(str('PA'))
-            st.session_state.volume += 380000
-            st.session_state.weight += 10
-        if products_radio == 'PA child':
-            st.session_state.products_text.append(str('PA child'))
-            st.session_state.volume += 144000
-            st.session_state.weight += 5
-        if products_radio == 'PS':
-            st.session_state.products_text.append(str('PS'))
-            st.session_state.volume += 380000
-            st.session_state.weight += 7
-        if products_radio == 'PS child':
-            st.session_state.products_text.append(str('PS child'))
-            st.session_state.volume += 144000
-            st.session_state.weight += 4
-        if products_radio == 'BS':
-            st.session_state.products_text.append(str('BS'))
-            st.session_state.volume += 360000
-            st.session_state.weight += 15
-        if products_radio == 'BS child':
-            st.session_state.products_text.append(str('BS child'))
-            st.session_state.volume += 240000
-            st.session_state.weight += 11
-        if products_radio == 'C2':
-            st.session_state.products_text.append(str('C2'))
-            st.session_state.volume += 4099536
-            st.session_state.weight += 163
-        if products_radio == 'MC':
-            st.session_state.products_text.append(str('MC'))
-            st.session_state.volume += 1376172
-            st.session_state.weight += 40
-        if products_radio == 'MC E-Scooter':
-            st.session_state.products_text.append(str('MC E-Scooter'))
-            st.session_state.volume += 1376172
-            st.session_state.weight += 45
-        if products_radio == 'EQ':
-            st.session_state.products_text.append(str('EQ'))
-            st.session_state.volume += 3208500
-            st.session_state.weight += 391
-        if products_radio == 'FlexPli':
-            st.session_state.products_text.append(str('FlexPli'))
-            st.session_state.volume += 700
-            st.session_state.weight += 1
-        if products_radio == 'AN static roe':
-            st.session_state.products_text.append(str('AN static roe'))
-            st.session_state.volume += 275000
-            st.session_state.weight += 5
-        if products_radio == 'AN static white tail deer':
-            st.session_state.products_text.append(str('AN static white tail deer'))
-            st.session_state.volume += 1365336
-            st.session_state.weight += 28
-        if products_radio == 'AN static wild boar':
-            st.session_state.products_text.append(str('AN static wild boar'))
-            st.session_state.volume += 1224468
-            st.session_state.weight += 23
-        if products_radio == 'AN static moose':
-            st.session_state.products_text.append(str('AN static moose'))
-            st.session_state.volume += 6075000
-            st.session_state.weight += 100
-
+            st.session_state.products_text.append(formate_dimensions(products_radio))
+            st.session_state.volume += df_dimensions.loc[products_radio, 'Length [cm]'] \
+            * df_dimensions.loc[products_radio, 'Width [cm]'] * df_dimensions.loc[products_radio, 'Height [cm]']
+            st.session_state.weight += df_dimensions.loc[products_radio, 'Weight [kg]']
 
     st.sidebar.write("""
     ### Further Packages
@@ -129,8 +66,8 @@ def user_input_features():
     if st.sidebar.button('Add Package'):
         st.session_state.volume += package_length*package_width*package_height
         st.session_state.weight += package_weight
-        st.session_state.products_text.append(str('Package: ') + str(package_length) + str('x') + str(package_width) +
-                                              str('x') + str(package_height) + str('cm³, ') + str(package_weight) + 'kg')
+        st.session_state.products_text.append(str('Extra Package: ') + str(package_length) + str('x') + str(package_width) +
+                                              str('x') + str(package_height) + str('cm³, ') + str(package_weight) + '.0' + 'kg')
 
     st.sidebar.write(str('__________________________________'))
 
@@ -211,4 +148,6 @@ r = requests.get(url) # Get the webpage
 svg = r.content.decode() # Decoded response content with the svg string
 
 render_svg(svg) # Render the svg string
+
+#________________________________________________________________________________________
 
