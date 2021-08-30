@@ -1,20 +1,20 @@
 Product,Length [cm],Width [cm],Height [cm],Weight [kg]
-4activeFBlarge,256,157,80,365
-4activeFBsmall,164,110,80,240
-4activeSB,120,80,155,343
-4activeXB,170,130,80,650
-4activePA,190,50,40,9.5
-4activePA (child),120,40,30,4.8
-4activePS,190,50,40,7
-4activePS (child),120,40,30,3.5
-4activeBS,100,80,45,15
-4activeBS (child),100,80,30,10.5
-4activeC2,294,84,166,163
-4activeMC,172,63,127,40
-4activeMC-E-Scooter,172,63,127,45
-4activeEQ,230,90,155,391
-4activeFlexPli,50,7,2,0.7
-4activeAN-static roe,100,110,25,5.2
-4activeAN-static white tail deer,172,63,126,28.4
-4activeAN-static wild boar,172,113,63,23
-4activeAN-static moose,270,225,100,100
+FB large,256,157,80,365
+FB small,164,110,80,240
+SB,120,80,155,343
+XB,170,130,80,650
+PA,190,50,40,9.5
+PA child,120,40,30,4.8
+PS,190,50,40,7
+PS child,120,40,30,3.5
+BS,100,80,45,15
+BS child,100,80,30,10.5
+C2,294,84,166,163
+MC,172,63,127,40
+MC E-Scooter,172,63,127,45
+EQ,230,90,155,391
+FlexPli,50,7,2,0.7
+AN static roe,100,110,25,5.2
+AN static white tail deer,172,63,126,28.4
+AN static wild boar,172,113,63,23
+AN static moose,270,225,100,100
