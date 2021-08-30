@@ -12,7 +12,6 @@ if 'products_text' not in st.session_state:
 #Get the Data from the Github csv
 df = pd.read_csv('https://raw.githubusercontent.com/danielsteinw/PredictionApps/main/transportCosts.csv')
 df_dimensions = pd.read_csv('https://raw.githubusercontent.com/danielsteinw/PredictionApps/main/dimensions.csv')
-dim_tab = df_dimensions.style.format({'Weight': lambda x : '{:.0f}'.format(x)})
 
 #Write the Header
 st.write("""
@@ -189,7 +188,7 @@ st.write('______________________________________________________________________
 show_data = st.checkbox('Show Data')
 
 if show_data:
-    st.write(dim_tab)
+    st.write(df_dimensions.style.format({'Weight [kg]': lambda x : '{:.0f}'.format(x)}))
 
 #______________________________________________________________________________________
 
