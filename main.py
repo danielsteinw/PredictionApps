@@ -58,7 +58,7 @@ def user_input_features():
     if coords_destination is None:
         coords_destination = coords_start
 
-    datamap = np.array([(coords_start.latitude, coords_start.longitude), (coords_destination.latitude, coords_destination.longitude)])
+    datamap = np.array([(coords_destination.latitude, coords_destination.longitude)])
     df_map = pd.DataFrame(datamap, columns=['lat', 'lon'])
 
     #Berechnen der Distanz
