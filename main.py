@@ -50,7 +50,7 @@ def user_input_features():
     express = st.sidebar.checkbox('Express Shipment')
     hazardous = st.sidebar.checkbox('Hazardous Goods')
     st.sidebar.subheader('Destination')
-    destination = st.sidebar.text_input('Country, City')
+    destination = st.sidebar.text_input('City, Country')
     coords_start = calculate_coords_start("Austria", "Traboch")
     if destination=="":
         destination="Traboch, Austria"
