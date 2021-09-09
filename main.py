@@ -1,6 +1,10 @@
 import pandas as pd
+import numpy as np
+import requests
+import json
 import streamlit as st
 from sklearn import linear_model
+from geopy.geocoders import Nominatim
 
 if 'volume' not in st.session_state:
     st.session_state.volume = 0
@@ -23,6 +27,16 @@ This application predicts the **Transport Costs** for 4activeSystems GmbH.
 #Writhe the Header of the Sidebar
 st.sidebar.header('User Input Parameters')
 
+def calculate_coords_destination(destination):
+    geolocator = Nominatim(user_agent="my_user_agent")
+    loc = geolocator.geocode(destination)
+    return loc
+
+def calculate_coords_start(country, city):
+    geolocator = Nominatim(user_agent="my_user_agent")
+    loc = geolocator.geocode(city + ',' + country)
+    return loc
+
 def formate_dimensions(product):
 
     text = product + ": " + str(df_dimensions.loc[product, 'Length [cm]']) + 'x' + str(df_dimensions.loc[product, 'Width [cm]']) \
@@ -35,7 +49,32 @@ def user_input_features():
 
     express = st.sidebar.checkbox('Express Shipment')
     hazardous = st.sidebar.checkbox('Hazardous Goods')
-    distance = st.sidebar.slider('Distance [km]', 1, 3000)
+    st.sidebar.subheader('Destination')
+    destination = st.sidebar.text_input('Country, City')
+    coords_start = calculate_coords_start("Austria", "Traboch")
+    if destination=="":
+        destination="Traboch, Austria"
+    coords_destination = calculate_coords_destination(destination)
+    if coords_destination is None:
+        coords_destination = coords_start
+
+    datamap = np.array([(coords_start.latitude, coords_start.longitude), (coords_destination.latitude, coords_destination.longitude)])
+    df_map = pd.DataFrame(datamap, columns=['lat', 'lon'])
+
+    #Berechnen der Distanz
+    r = requests.get(
+        f"http://router.project-osrm.org/route/v1/car/{coords_start.longitude},{coords_start.latitude};{coords_destination.longitude},{coords_destination.latitude}?overview=false""")
+    routes = json.loads(r.content)
+    route_1 = routes.get("routes")[0]
+    route_1.get('distance')
+    distance = round(route_1.get('distance')/1000)
+
+    show_distance_manually = st.sidebar.checkbox('Enter Distance manually')
+    if show_distance_manually:
+        distance = st.sidebar.slider('Distance [km]', 1, 3000)
+        st.sidebar.write('Distance: ' + str(distance) + 'km')
+    else:
+        st.sidebar.write('Distance: ' + str(round(route_1.get('distance') / 1000)) + 'km')
 
     st.sidebar.write("""
     ### Products for Shipment
@@ -81,10 +120,10 @@ def user_input_features():
             'Weight': st.session_state.weight}
     features = pd.DataFrame(data, index=[0])
 
-    return features
+    return features, df_map
 
 
-dftwo = user_input_features()
+dftwo, df_map = user_input_features()
 s = dftwo.style.format({'Volume': lambda x : '{:.0f}'.format(x), 'Weight': lambda y : '{:.0f}'.format(y)})
 
 st.subheader('User Input Parameters')
@@ -120,7 +159,9 @@ st.subheader('Quality Measure of the Result')
 st.write('R² = ' + float_formatter(regr.score(X, y)*100) + '%')
 
 st.write('___________________________________________________________________________')
-show_data = st.checkbox('Show Data')
+st.map(df_map)
+st.write('___________________________________________________________________________')
+show_data = st.checkbox('Show Packing Dimensions')
 
 if show_data:
     st.write(df_dimensions.style.format({'Weight [kg]': lambda x : '{:.0f}'.format(x)}))
@@ -148,4 +189,5 @@ svg = r.content.decode() # Decoded response content with the svg string
 render_svg(svg) # Render the svg string
 
 #________________________________________________________________________________________
+
 
